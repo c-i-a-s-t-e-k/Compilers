@@ -17,7 +17,7 @@ reserved = {
 
 tokens = ('DOTADD', 'DOTSUB', 'DOTMUL', 'DOTDIV', 'ADDEQ', 'SUBEQ', 
           'MULEQ', 'DIVEQ', 'LOWEQ', 'HIGEQ', 'NOTEQ', 'EQ', 'NUMINT',
-            'NUMFLOAT', 'ID', 'STR') + tuple(reserved.values())
+            'NUMFLOAT', 'ID', 'STR', 'COMMENT') + tuple(reserved.values())
 
 t_DOTADD = r"\.\+"
 t_DOTSUB = r"\.\-"
@@ -34,6 +34,9 @@ t_EQ = r"=="
  
 literals = [ '+','-','*','/','(',')', '=', '\'', '<', '>', '[',']','{','}', ':', ',', ';']
 
+def t_COMMENT(t):
+    r'\#.*'
+    pass
 
 def t_NUMINT(t):
     r'\d+'

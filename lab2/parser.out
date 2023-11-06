@@ -2,33 +2,21 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    ADDEQ
     BREAK
     CONTINUE
-    DIVEQ
-    DOTADD
-    DOTDIV
-    DOTMUL
-    DOTSUB
     ELSE
     EQ
-    EYE
     FOR
-    HIGEQ
-    ID
+    GREATER
+    GREATEREQ
     IF
-    LOWEQ
-    MULEQ
+    LESS
+    LESSEQ
     NOTEQ
-    NUMFLOAT
-    NUMINT
-    ONES
     PRINT
     RETURN
-    STR
-    SUBEQ
+    STRING
     WHILE
-    ZEROSA
 
 Grammar
 
@@ -38,42 +26,1756 @@ Rule 2     instructions_opt -> instructions
 Rule 3     instructions_opt -> <empty>
 Rule 4     instructions -> instructions instruction
 Rule 5     instructions -> instruction
+Rule 6     instruction -> assignment
+Rule 7     assignment -> ID = expression ;
+Rule 8     assignment -> ID ADDASSIGN expression ;
+Rule 9     assignment -> ID SUBASSIGN expression ;
+Rule 10    assignment -> ID MULASSIGN expression ;
+Rule 11    assignment -> ID DIVASSIGN expression ;
+Rule 12    assignment -> ID [ expression , expression ] = expression ;
+Rule 13    expression -> expression ADD expression
+Rule 14    expression -> expression MINUS expression
+Rule 15    expression -> expression MUL expression
+Rule 16    expression -> expression DIVIDE expression
+Rule 17    expression -> expression DOTADD expression
+Rule 18    expression -> expression DOTSUB expression
+Rule 19    expression -> expression DOTMUL expression
+Rule 20    expression -> expression DOTDIVIDE expression
+Rule 21    expression -> INTNUM
+Rule 22    expression -> FLOAT
+Rule 23    expression -> matrix_expression
+Rule 24    expression -> matrix_create
+Rule 25    expression -> ID
+Rule 26    matrix_expression -> ZEROS ( expression )
+Rule 27    matrix_expression -> ONES ( expression )
+Rule 28    matrix_expression -> EYE ( expression )
+Rule 29    matrix_create -> [ matrix_rows ]
+Rule 30    matrix_rows -> matrix_rows , matrix_rows
+Rule 31    matrix_rows -> [ matrix_elems ]
+Rule 32    matrix_elems -> matrix_elems , matrix_elems
+Rule 33    matrix_elems -> expression
 
 Terminals, with rules where they appear
 
-ADDEQ                : 
+(                    : 26 27 28
+)                    : 26 27 28
+,                    : 12 30 32
+;                    : 7 8 9 10 11 12
+=                    : 7 12
+ADD                  : 13
+ADDASSIGN            : 8
 BREAK                : 
 CONTINUE             : 
-DIVEQ                : 
-DOTADD               : 
-DOTDIV               : 
-DOTMUL               : 
-DOTSUB               : 
+DIVASSIGN            : 11
+DIVIDE               : 16
+DOTADD               : 17
+DOTDIVIDE            : 20
+DOTMUL               : 19
+DOTSUB               : 18
 ELSE                 : 
 EQ                   : 
-EYE                  : 
+EYE                  : 28
+FLOAT                : 22
 FOR                  : 
-HIGEQ                : 
-ID                   : 
+GREATER              : 
+GREATEREQ            : 
+ID                   : 7 8 9 10 11 12 25
 IF                   : 
-LOWEQ                : 
-MULEQ                : 
+INTNUM               : 21
+LESS                 : 
+LESSEQ               : 
+MINUS                : 14
+MUL                  : 15
+MULASSIGN            : 10
 NOTEQ                : 
-NUMFLOAT             : 
-NUMINT               : 
-ONES                 : 
+ONES                 : 27
 PRINT                : 
 RETURN               : 
-STR                  : 
-SUBEQ                : 
+STRING               : 
+SUBASSIGN            : 9
 WHILE                : 
-ZEROSA               : 
+ZEROS                : 26
+[                    : 12 29 31
+]                    : 12 29 31
 error                : 
 
 Nonterminals, with rules where they appear
 
+assignment           : 6
+expression           : 7 8 9 10 11 12 12 12 13 13 14 14 15 15 16 16 17 17 18 18 19 19 20 20 26 27 28 33
 instruction          : 4 5
 instructions         : 2 4
 instructions_opt     : 1
+matrix_create        : 24
+matrix_elems         : 31 32 32
+matrix_expression    : 23
+matrix_rows          : 29 30 30
 program              : 0
 
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . instructions_opt
+    (2) instructions_opt -> . instructions
+    (3) instructions_opt -> .
+    (4) instructions -> . instructions instruction
+    (5) instructions -> . instruction
+    (6) instruction -> . assignment
+    (7) assignment -> . ID = expression ;
+    (8) assignment -> . ID ADDASSIGN expression ;
+    (9) assignment -> . ID SUBASSIGN expression ;
+    (10) assignment -> . ID MULASSIGN expression ;
+    (11) assignment -> . ID DIVASSIGN expression ;
+    (12) assignment -> . ID [ expression , expression ] = expression ;
+
+    $end            reduce using rule 3 (instructions_opt -> .)
+    ID              shift and go to state 6
+
+    program                        shift and go to state 1
+    instructions_opt               shift and go to state 2
+    instructions                   shift and go to state 3
+    instruction                    shift and go to state 4
+    assignment                     shift and go to state 5
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> instructions_opt .
+
+    $end            reduce using rule 1 (program -> instructions_opt .)
+
+
+state 3
+
+    (2) instructions_opt -> instructions .
+    (4) instructions -> instructions . instruction
+    (6) instruction -> . assignment
+    (7) assignment -> . ID = expression ;
+    (8) assignment -> . ID ADDASSIGN expression ;
+    (9) assignment -> . ID SUBASSIGN expression ;
+    (10) assignment -> . ID MULASSIGN expression ;
+    (11) assignment -> . ID DIVASSIGN expression ;
+    (12) assignment -> . ID [ expression , expression ] = expression ;
+
+    $end            reduce using rule 2 (instructions_opt -> instructions .)
+    ID              shift and go to state 6
+
+    instruction                    shift and go to state 7
+    assignment                     shift and go to state 5
+
+state 4
+
+    (5) instructions -> instruction .
+
+    ID              reduce using rule 5 (instructions -> instruction .)
+    $end            reduce using rule 5 (instructions -> instruction .)
+
+
+state 5
+
+    (6) instruction -> assignment .
+
+    ID              reduce using rule 6 (instruction -> assignment .)
+    $end            reduce using rule 6 (instruction -> assignment .)
+
+
+state 6
+
+    (7) assignment -> ID . = expression ;
+    (8) assignment -> ID . ADDASSIGN expression ;
+    (9) assignment -> ID . SUBASSIGN expression ;
+    (10) assignment -> ID . MULASSIGN expression ;
+    (11) assignment -> ID . DIVASSIGN expression ;
+    (12) assignment -> ID . [ expression , expression ] = expression ;
+
+    =               shift and go to state 8
+    ADDASSIGN       shift and go to state 9
+    SUBASSIGN       shift and go to state 10
+    MULASSIGN       shift and go to state 11
+    DIVASSIGN       shift and go to state 12
+    [               shift and go to state 13
+
+
+state 7
+
+    (4) instructions -> instructions instruction .
+
+    ID              reduce using rule 4 (instructions -> instructions instruction .)
+    $end            reduce using rule 4 (instructions -> instructions instruction .)
+
+
+state 8
+
+    (7) assignment -> ID = . expression ;
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 15
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 9
+
+    (8) assignment -> ID ADDASSIGN . expression ;
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 24
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 10
+
+    (9) assignment -> ID SUBASSIGN . expression ;
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 25
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 11
+
+    (10) assignment -> ID MULASSIGN . expression ;
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 26
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 12
+
+    (11) assignment -> ID DIVASSIGN . expression ;
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 27
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 13
+
+    (12) assignment -> ID [ . expression , expression ] = expression ;
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 28
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 14
+
+    (25) expression -> ID .
+
+    ;               reduce using rule 25 (expression -> ID .)
+    ADD             reduce using rule 25 (expression -> ID .)
+    MINUS           reduce using rule 25 (expression -> ID .)
+    MUL             reduce using rule 25 (expression -> ID .)
+    DIVIDE          reduce using rule 25 (expression -> ID .)
+    DOTADD          reduce using rule 25 (expression -> ID .)
+    DOTSUB          reduce using rule 25 (expression -> ID .)
+    DOTMUL          reduce using rule 25 (expression -> ID .)
+    DOTDIVIDE       reduce using rule 25 (expression -> ID .)
+    ,               reduce using rule 25 (expression -> ID .)
+    )               reduce using rule 25 (expression -> ID .)
+    ]               reduce using rule 25 (expression -> ID .)
+
+
+state 15
+
+    (7) assignment -> ID = expression . ;
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ;               shift and go to state 29
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+    DOTADD          shift and go to state 34
+    DOTSUB          shift and go to state 35
+    DOTMUL          shift and go to state 36
+    DOTDIVIDE       shift and go to state 37
+
+
+state 16
+
+    (21) expression -> INTNUM .
+
+    ;               reduce using rule 21 (expression -> INTNUM .)
+    ADD             reduce using rule 21 (expression -> INTNUM .)
+    MINUS           reduce using rule 21 (expression -> INTNUM .)
+    MUL             reduce using rule 21 (expression -> INTNUM .)
+    DIVIDE          reduce using rule 21 (expression -> INTNUM .)
+    DOTADD          reduce using rule 21 (expression -> INTNUM .)
+    DOTSUB          reduce using rule 21 (expression -> INTNUM .)
+    DOTMUL          reduce using rule 21 (expression -> INTNUM .)
+    DOTDIVIDE       reduce using rule 21 (expression -> INTNUM .)
+    ,               reduce using rule 21 (expression -> INTNUM .)
+    )               reduce using rule 21 (expression -> INTNUM .)
+    ]               reduce using rule 21 (expression -> INTNUM .)
+
+
+state 17
+
+    (22) expression -> FLOAT .
+
+    ;               reduce using rule 22 (expression -> FLOAT .)
+    ADD             reduce using rule 22 (expression -> FLOAT .)
+    MINUS           reduce using rule 22 (expression -> FLOAT .)
+    MUL             reduce using rule 22 (expression -> FLOAT .)
+    DIVIDE          reduce using rule 22 (expression -> FLOAT .)
+    DOTADD          reduce using rule 22 (expression -> FLOAT .)
+    DOTSUB          reduce using rule 22 (expression -> FLOAT .)
+    DOTMUL          reduce using rule 22 (expression -> FLOAT .)
+    DOTDIVIDE       reduce using rule 22 (expression -> FLOAT .)
+    ,               reduce using rule 22 (expression -> FLOAT .)
+    )               reduce using rule 22 (expression -> FLOAT .)
+    ]               reduce using rule 22 (expression -> FLOAT .)
+
+
+state 18
+
+    (23) expression -> matrix_expression .
+
+    ;               reduce using rule 23 (expression -> matrix_expression .)
+    ADD             reduce using rule 23 (expression -> matrix_expression .)
+    MINUS           reduce using rule 23 (expression -> matrix_expression .)
+    MUL             reduce using rule 23 (expression -> matrix_expression .)
+    DIVIDE          reduce using rule 23 (expression -> matrix_expression .)
+    DOTADD          reduce using rule 23 (expression -> matrix_expression .)
+    DOTSUB          reduce using rule 23 (expression -> matrix_expression .)
+    DOTMUL          reduce using rule 23 (expression -> matrix_expression .)
+    DOTDIVIDE       reduce using rule 23 (expression -> matrix_expression .)
+    ,               reduce using rule 23 (expression -> matrix_expression .)
+    )               reduce using rule 23 (expression -> matrix_expression .)
+    ]               reduce using rule 23 (expression -> matrix_expression .)
+
+
+state 19
+
+    (24) expression -> matrix_create .
+
+    ;               reduce using rule 24 (expression -> matrix_create .)
+    ADD             reduce using rule 24 (expression -> matrix_create .)
+    MINUS           reduce using rule 24 (expression -> matrix_create .)
+    MUL             reduce using rule 24 (expression -> matrix_create .)
+    DIVIDE          reduce using rule 24 (expression -> matrix_create .)
+    DOTADD          reduce using rule 24 (expression -> matrix_create .)
+    DOTSUB          reduce using rule 24 (expression -> matrix_create .)
+    DOTMUL          reduce using rule 24 (expression -> matrix_create .)
+    DOTDIVIDE       reduce using rule 24 (expression -> matrix_create .)
+    ,               reduce using rule 24 (expression -> matrix_create .)
+    )               reduce using rule 24 (expression -> matrix_create .)
+    ]               reduce using rule 24 (expression -> matrix_create .)
+
+
+state 20
+
+    (26) matrix_expression -> ZEROS . ( expression )
+
+    (               shift and go to state 38
+
+
+state 21
+
+    (27) matrix_expression -> ONES . ( expression )
+
+    (               shift and go to state 39
+
+
+state 22
+
+    (28) matrix_expression -> EYE . ( expression )
+
+    (               shift and go to state 40
+
+
+state 23
+
+    (29) matrix_create -> [ . matrix_rows ]
+    (30) matrix_rows -> . matrix_rows , matrix_rows
+    (31) matrix_rows -> . [ matrix_elems ]
+
+    [               shift and go to state 41
+
+    matrix_rows                    shift and go to state 42
+
+state 24
+
+    (8) assignment -> ID ADDASSIGN expression . ;
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ;               shift and go to state 43
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+    DOTADD          shift and go to state 34
+    DOTSUB          shift and go to state 35
+    DOTMUL          shift and go to state 36
+    DOTDIVIDE       shift and go to state 37
+
+
+state 25
+
+    (9) assignment -> ID SUBASSIGN expression . ;
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ;               shift and go to state 44
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+    DOTADD          shift and go to state 34
+    DOTSUB          shift and go to state 35
+    DOTMUL          shift and go to state 36
+    DOTDIVIDE       shift and go to state 37
+
+
+state 26
+
+    (10) assignment -> ID MULASSIGN expression . ;
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ;               shift and go to state 45
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+    DOTADD          shift and go to state 34
+    DOTSUB          shift and go to state 35
+    DOTMUL          shift and go to state 36
+    DOTDIVIDE       shift and go to state 37
+
+
+state 27
+
+    (11) assignment -> ID DIVASSIGN expression . ;
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ;               shift and go to state 46
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+    DOTADD          shift and go to state 34
+    DOTSUB          shift and go to state 35
+    DOTMUL          shift and go to state 36
+    DOTDIVIDE       shift and go to state 37
+
+
+state 28
+
+    (12) assignment -> ID [ expression . , expression ] = expression ;
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ,               shift and go to state 47
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+    DOTADD          shift and go to state 34
+    DOTSUB          shift and go to state 35
+    DOTMUL          shift and go to state 36
+    DOTDIVIDE       shift and go to state 37
+
+
+state 29
+
+    (7) assignment -> ID = expression ; .
+
+    ID              reduce using rule 7 (assignment -> ID = expression ; .)
+    $end            reduce using rule 7 (assignment -> ID = expression ; .)
+
+
+state 30
+
+    (13) expression -> expression ADD . expression
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 48
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 31
+
+    (14) expression -> expression MINUS . expression
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 49
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 32
+
+    (15) expression -> expression MUL . expression
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 50
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 33
+
+    (16) expression -> expression DIVIDE . expression
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 51
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 34
+
+    (17) expression -> expression DOTADD . expression
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 52
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 35
+
+    (18) expression -> expression DOTSUB . expression
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 53
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 36
+
+    (19) expression -> expression DOTMUL . expression
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 54
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 37
+
+    (20) expression -> expression DOTDIVIDE . expression
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 55
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 38
+
+    (26) matrix_expression -> ZEROS ( . expression )
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 56
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 39
+
+    (27) matrix_expression -> ONES ( . expression )
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 57
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 40
+
+    (28) matrix_expression -> EYE ( . expression )
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 58
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 41
+
+    (31) matrix_rows -> [ . matrix_elems ]
+    (32) matrix_elems -> . matrix_elems , matrix_elems
+    (33) matrix_elems -> . expression
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    matrix_elems                   shift and go to state 59
+    expression                     shift and go to state 60
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 42
+
+    (29) matrix_create -> [ matrix_rows . ]
+    (30) matrix_rows -> matrix_rows . , matrix_rows
+
+    ]               shift and go to state 61
+    ,               shift and go to state 62
+
+
+state 43
+
+    (8) assignment -> ID ADDASSIGN expression ; .
+
+    ID              reduce using rule 8 (assignment -> ID ADDASSIGN expression ; .)
+    $end            reduce using rule 8 (assignment -> ID ADDASSIGN expression ; .)
+
+
+state 44
+
+    (9) assignment -> ID SUBASSIGN expression ; .
+
+    ID              reduce using rule 9 (assignment -> ID SUBASSIGN expression ; .)
+    $end            reduce using rule 9 (assignment -> ID SUBASSIGN expression ; .)
+
+
+state 45
+
+    (10) assignment -> ID MULASSIGN expression ; .
+
+    ID              reduce using rule 10 (assignment -> ID MULASSIGN expression ; .)
+    $end            reduce using rule 10 (assignment -> ID MULASSIGN expression ; .)
+
+
+state 46
+
+    (11) assignment -> ID DIVASSIGN expression ; .
+
+    ID              reduce using rule 11 (assignment -> ID DIVASSIGN expression ; .)
+    $end            reduce using rule 11 (assignment -> ID DIVASSIGN expression ; .)
+
+
+state 47
+
+    (12) assignment -> ID [ expression , . expression ] = expression ;
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 63
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 48
+
+    (13) expression -> expression ADD expression .
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ;               reduce using rule 13 (expression -> expression ADD expression .)
+    ADD             reduce using rule 13 (expression -> expression ADD expression .)
+    MINUS           reduce using rule 13 (expression -> expression ADD expression .)
+    DOTADD          reduce using rule 13 (expression -> expression ADD expression .)
+    DOTSUB          reduce using rule 13 (expression -> expression ADD expression .)
+    DOTMUL          reduce using rule 13 (expression -> expression ADD expression .)
+    DOTDIVIDE       reduce using rule 13 (expression -> expression ADD expression .)
+    ,               reduce using rule 13 (expression -> expression ADD expression .)
+    )               reduce using rule 13 (expression -> expression ADD expression .)
+    ]               reduce using rule 13 (expression -> expression ADD expression .)
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+
+  ! MUL             [ reduce using rule 13 (expression -> expression ADD expression .) ]
+  ! DIVIDE          [ reduce using rule 13 (expression -> expression ADD expression .) ]
+  ! ADD             [ shift and go to state 30 ]
+  ! MINUS           [ shift and go to state 31 ]
+  ! DOTADD          [ shift and go to state 34 ]
+  ! DOTSUB          [ shift and go to state 35 ]
+  ! DOTMUL          [ shift and go to state 36 ]
+  ! DOTDIVIDE       [ shift and go to state 37 ]
+
+
+state 49
+
+    (14) expression -> expression MINUS expression .
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ;               reduce using rule 14 (expression -> expression MINUS expression .)
+    ADD             reduce using rule 14 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 14 (expression -> expression MINUS expression .)
+    DOTADD          reduce using rule 14 (expression -> expression MINUS expression .)
+    DOTSUB          reduce using rule 14 (expression -> expression MINUS expression .)
+    DOTMUL          reduce using rule 14 (expression -> expression MINUS expression .)
+    DOTDIVIDE       reduce using rule 14 (expression -> expression MINUS expression .)
+    ,               reduce using rule 14 (expression -> expression MINUS expression .)
+    )               reduce using rule 14 (expression -> expression MINUS expression .)
+    ]               reduce using rule 14 (expression -> expression MINUS expression .)
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+
+  ! MUL             [ reduce using rule 14 (expression -> expression MINUS expression .) ]
+  ! DIVIDE          [ reduce using rule 14 (expression -> expression MINUS expression .) ]
+  ! ADD             [ shift and go to state 30 ]
+  ! MINUS           [ shift and go to state 31 ]
+  ! DOTADD          [ shift and go to state 34 ]
+  ! DOTSUB          [ shift and go to state 35 ]
+  ! DOTMUL          [ shift and go to state 36 ]
+  ! DOTDIVIDE       [ shift and go to state 37 ]
+
+
+state 50
+
+    (15) expression -> expression MUL expression .
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ;               reduce using rule 15 (expression -> expression MUL expression .)
+    ADD             reduce using rule 15 (expression -> expression MUL expression .)
+    MINUS           reduce using rule 15 (expression -> expression MUL expression .)
+    MUL             reduce using rule 15 (expression -> expression MUL expression .)
+    DIVIDE          reduce using rule 15 (expression -> expression MUL expression .)
+    DOTADD          reduce using rule 15 (expression -> expression MUL expression .)
+    DOTSUB          reduce using rule 15 (expression -> expression MUL expression .)
+    DOTMUL          reduce using rule 15 (expression -> expression MUL expression .)
+    DOTDIVIDE       reduce using rule 15 (expression -> expression MUL expression .)
+    ,               reduce using rule 15 (expression -> expression MUL expression .)
+    )               reduce using rule 15 (expression -> expression MUL expression .)
+    ]               reduce using rule 15 (expression -> expression MUL expression .)
+
+  ! ADD             [ shift and go to state 30 ]
+  ! MINUS           [ shift and go to state 31 ]
+  ! MUL             [ shift and go to state 32 ]
+  ! DIVIDE          [ shift and go to state 33 ]
+  ! DOTADD          [ shift and go to state 34 ]
+  ! DOTSUB          [ shift and go to state 35 ]
+  ! DOTMUL          [ shift and go to state 36 ]
+  ! DOTDIVIDE       [ shift and go to state 37 ]
+
+
+state 51
+
+    (16) expression -> expression DIVIDE expression .
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ;               reduce using rule 16 (expression -> expression DIVIDE expression .)
+    ADD             reduce using rule 16 (expression -> expression DIVIDE expression .)
+    MINUS           reduce using rule 16 (expression -> expression DIVIDE expression .)
+    MUL             reduce using rule 16 (expression -> expression DIVIDE expression .)
+    DIVIDE          reduce using rule 16 (expression -> expression DIVIDE expression .)
+    DOTADD          reduce using rule 16 (expression -> expression DIVIDE expression .)
+    DOTSUB          reduce using rule 16 (expression -> expression DIVIDE expression .)
+    DOTMUL          reduce using rule 16 (expression -> expression DIVIDE expression .)
+    DOTDIVIDE       reduce using rule 16 (expression -> expression DIVIDE expression .)
+    ,               reduce using rule 16 (expression -> expression DIVIDE expression .)
+    )               reduce using rule 16 (expression -> expression DIVIDE expression .)
+    ]               reduce using rule 16 (expression -> expression DIVIDE expression .)
+
+  ! ADD             [ shift and go to state 30 ]
+  ! MINUS           [ shift and go to state 31 ]
+  ! MUL             [ shift and go to state 32 ]
+  ! DIVIDE          [ shift and go to state 33 ]
+  ! DOTADD          [ shift and go to state 34 ]
+  ! DOTSUB          [ shift and go to state 35 ]
+  ! DOTMUL          [ shift and go to state 36 ]
+  ! DOTDIVIDE       [ shift and go to state 37 ]
+
+
+state 52
+
+    (17) expression -> expression DOTADD expression .
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ;               reduce using rule 17 (expression -> expression DOTADD expression .)
+    DOTADD          reduce using rule 17 (expression -> expression DOTADD expression .)
+    DOTSUB          reduce using rule 17 (expression -> expression DOTADD expression .)
+    ,               reduce using rule 17 (expression -> expression DOTADD expression .)
+    )               reduce using rule 17 (expression -> expression DOTADD expression .)
+    ]               reduce using rule 17 (expression -> expression DOTADD expression .)
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+    DOTMUL          shift and go to state 36
+    DOTDIVIDE       shift and go to state 37
+
+  ! ADD             [ reduce using rule 17 (expression -> expression DOTADD expression .) ]
+  ! MINUS           [ reduce using rule 17 (expression -> expression DOTADD expression .) ]
+  ! MUL             [ reduce using rule 17 (expression -> expression DOTADD expression .) ]
+  ! DIVIDE          [ reduce using rule 17 (expression -> expression DOTADD expression .) ]
+  ! DOTMUL          [ reduce using rule 17 (expression -> expression DOTADD expression .) ]
+  ! DOTDIVIDE       [ reduce using rule 17 (expression -> expression DOTADD expression .) ]
+  ! DOTADD          [ shift and go to state 34 ]
+  ! DOTSUB          [ shift and go to state 35 ]
+
+
+state 53
+
+    (18) expression -> expression DOTSUB expression .
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ;               reduce using rule 18 (expression -> expression DOTSUB expression .)
+    DOTADD          reduce using rule 18 (expression -> expression DOTSUB expression .)
+    DOTSUB          reduce using rule 18 (expression -> expression DOTSUB expression .)
+    ,               reduce using rule 18 (expression -> expression DOTSUB expression .)
+    )               reduce using rule 18 (expression -> expression DOTSUB expression .)
+    ]               reduce using rule 18 (expression -> expression DOTSUB expression .)
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+    DOTMUL          shift and go to state 36
+    DOTDIVIDE       shift and go to state 37
+
+  ! ADD             [ reduce using rule 18 (expression -> expression DOTSUB expression .) ]
+  ! MINUS           [ reduce using rule 18 (expression -> expression DOTSUB expression .) ]
+  ! MUL             [ reduce using rule 18 (expression -> expression DOTSUB expression .) ]
+  ! DIVIDE          [ reduce using rule 18 (expression -> expression DOTSUB expression .) ]
+  ! DOTMUL          [ reduce using rule 18 (expression -> expression DOTSUB expression .) ]
+  ! DOTDIVIDE       [ reduce using rule 18 (expression -> expression DOTSUB expression .) ]
+  ! DOTADD          [ shift and go to state 34 ]
+  ! DOTSUB          [ shift and go to state 35 ]
+
+
+state 54
+
+    (19) expression -> expression DOTMUL expression .
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ;               reduce using rule 19 (expression -> expression DOTMUL expression .)
+    DOTADD          reduce using rule 19 (expression -> expression DOTMUL expression .)
+    DOTSUB          reduce using rule 19 (expression -> expression DOTMUL expression .)
+    DOTMUL          reduce using rule 19 (expression -> expression DOTMUL expression .)
+    DOTDIVIDE       reduce using rule 19 (expression -> expression DOTMUL expression .)
+    ,               reduce using rule 19 (expression -> expression DOTMUL expression .)
+    )               reduce using rule 19 (expression -> expression DOTMUL expression .)
+    ]               reduce using rule 19 (expression -> expression DOTMUL expression .)
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+
+  ! ADD             [ reduce using rule 19 (expression -> expression DOTMUL expression .) ]
+  ! MINUS           [ reduce using rule 19 (expression -> expression DOTMUL expression .) ]
+  ! MUL             [ reduce using rule 19 (expression -> expression DOTMUL expression .) ]
+  ! DIVIDE          [ reduce using rule 19 (expression -> expression DOTMUL expression .) ]
+  ! DOTADD          [ shift and go to state 34 ]
+  ! DOTSUB          [ shift and go to state 35 ]
+  ! DOTMUL          [ shift and go to state 36 ]
+  ! DOTDIVIDE       [ shift and go to state 37 ]
+
+
+state 55
+
+    (20) expression -> expression DOTDIVIDE expression .
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ;               reduce using rule 20 (expression -> expression DOTDIVIDE expression .)
+    DOTADD          reduce using rule 20 (expression -> expression DOTDIVIDE expression .)
+    DOTSUB          reduce using rule 20 (expression -> expression DOTDIVIDE expression .)
+    DOTMUL          reduce using rule 20 (expression -> expression DOTDIVIDE expression .)
+    DOTDIVIDE       reduce using rule 20 (expression -> expression DOTDIVIDE expression .)
+    ,               reduce using rule 20 (expression -> expression DOTDIVIDE expression .)
+    )               reduce using rule 20 (expression -> expression DOTDIVIDE expression .)
+    ]               reduce using rule 20 (expression -> expression DOTDIVIDE expression .)
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+
+  ! ADD             [ reduce using rule 20 (expression -> expression DOTDIVIDE expression .) ]
+  ! MINUS           [ reduce using rule 20 (expression -> expression DOTDIVIDE expression .) ]
+  ! MUL             [ reduce using rule 20 (expression -> expression DOTDIVIDE expression .) ]
+  ! DIVIDE          [ reduce using rule 20 (expression -> expression DOTDIVIDE expression .) ]
+  ! DOTADD          [ shift and go to state 34 ]
+  ! DOTSUB          [ shift and go to state 35 ]
+  ! DOTMUL          [ shift and go to state 36 ]
+  ! DOTDIVIDE       [ shift and go to state 37 ]
+
+
+state 56
+
+    (26) matrix_expression -> ZEROS ( expression . )
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    )               shift and go to state 64
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+    DOTADD          shift and go to state 34
+    DOTSUB          shift and go to state 35
+    DOTMUL          shift and go to state 36
+    DOTDIVIDE       shift and go to state 37
+
+
+state 57
+
+    (27) matrix_expression -> ONES ( expression . )
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    )               shift and go to state 65
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+    DOTADD          shift and go to state 34
+    DOTSUB          shift and go to state 35
+    DOTMUL          shift and go to state 36
+    DOTDIVIDE       shift and go to state 37
+
+
+state 58
+
+    (28) matrix_expression -> EYE ( expression . )
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    )               shift and go to state 66
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+    DOTADD          shift and go to state 34
+    DOTSUB          shift and go to state 35
+    DOTMUL          shift and go to state 36
+    DOTDIVIDE       shift and go to state 37
+
+
+state 59
+
+    (31) matrix_rows -> [ matrix_elems . ]
+    (32) matrix_elems -> matrix_elems . , matrix_elems
+
+    ]               shift and go to state 67
+    ,               shift and go to state 68
+
+
+state 60
+
+    (33) matrix_elems -> expression .
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ]               reduce using rule 33 (matrix_elems -> expression .)
+    ,               reduce using rule 33 (matrix_elems -> expression .)
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+    DOTADD          shift and go to state 34
+    DOTSUB          shift and go to state 35
+    DOTMUL          shift and go to state 36
+    DOTDIVIDE       shift and go to state 37
+
+
+state 61
+
+    (29) matrix_create -> [ matrix_rows ] .
+
+    ;               reduce using rule 29 (matrix_create -> [ matrix_rows ] .)
+    ADD             reduce using rule 29 (matrix_create -> [ matrix_rows ] .)
+    MINUS           reduce using rule 29 (matrix_create -> [ matrix_rows ] .)
+    MUL             reduce using rule 29 (matrix_create -> [ matrix_rows ] .)
+    DIVIDE          reduce using rule 29 (matrix_create -> [ matrix_rows ] .)
+    DOTADD          reduce using rule 29 (matrix_create -> [ matrix_rows ] .)
+    DOTSUB          reduce using rule 29 (matrix_create -> [ matrix_rows ] .)
+    DOTMUL          reduce using rule 29 (matrix_create -> [ matrix_rows ] .)
+    DOTDIVIDE       reduce using rule 29 (matrix_create -> [ matrix_rows ] .)
+    ,               reduce using rule 29 (matrix_create -> [ matrix_rows ] .)
+    )               reduce using rule 29 (matrix_create -> [ matrix_rows ] .)
+    ]               reduce using rule 29 (matrix_create -> [ matrix_rows ] .)
+
+
+state 62
+
+    (30) matrix_rows -> matrix_rows , . matrix_rows
+    (30) matrix_rows -> . matrix_rows , matrix_rows
+    (31) matrix_rows -> . [ matrix_elems ]
+
+    [               shift and go to state 41
+
+    matrix_rows                    shift and go to state 69
+
+state 63
+
+    (12) assignment -> ID [ expression , expression . ] = expression ;
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ]               shift and go to state 70
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+    DOTADD          shift and go to state 34
+    DOTSUB          shift and go to state 35
+    DOTMUL          shift and go to state 36
+    DOTDIVIDE       shift and go to state 37
+
+
+state 64
+
+    (26) matrix_expression -> ZEROS ( expression ) .
+
+    ;               reduce using rule 26 (matrix_expression -> ZEROS ( expression ) .)
+    ADD             reduce using rule 26 (matrix_expression -> ZEROS ( expression ) .)
+    MINUS           reduce using rule 26 (matrix_expression -> ZEROS ( expression ) .)
+    MUL             reduce using rule 26 (matrix_expression -> ZEROS ( expression ) .)
+    DIVIDE          reduce using rule 26 (matrix_expression -> ZEROS ( expression ) .)
+    DOTADD          reduce using rule 26 (matrix_expression -> ZEROS ( expression ) .)
+    DOTSUB          reduce using rule 26 (matrix_expression -> ZEROS ( expression ) .)
+    DOTMUL          reduce using rule 26 (matrix_expression -> ZEROS ( expression ) .)
+    DOTDIVIDE       reduce using rule 26 (matrix_expression -> ZEROS ( expression ) .)
+    ,               reduce using rule 26 (matrix_expression -> ZEROS ( expression ) .)
+    )               reduce using rule 26 (matrix_expression -> ZEROS ( expression ) .)
+    ]               reduce using rule 26 (matrix_expression -> ZEROS ( expression ) .)
+
+
+state 65
+
+    (27) matrix_expression -> ONES ( expression ) .
+
+    ;               reduce using rule 27 (matrix_expression -> ONES ( expression ) .)
+    ADD             reduce using rule 27 (matrix_expression -> ONES ( expression ) .)
+    MINUS           reduce using rule 27 (matrix_expression -> ONES ( expression ) .)
+    MUL             reduce using rule 27 (matrix_expression -> ONES ( expression ) .)
+    DIVIDE          reduce using rule 27 (matrix_expression -> ONES ( expression ) .)
+    DOTADD          reduce using rule 27 (matrix_expression -> ONES ( expression ) .)
+    DOTSUB          reduce using rule 27 (matrix_expression -> ONES ( expression ) .)
+    DOTMUL          reduce using rule 27 (matrix_expression -> ONES ( expression ) .)
+    DOTDIVIDE       reduce using rule 27 (matrix_expression -> ONES ( expression ) .)
+    ,               reduce using rule 27 (matrix_expression -> ONES ( expression ) .)
+    )               reduce using rule 27 (matrix_expression -> ONES ( expression ) .)
+    ]               reduce using rule 27 (matrix_expression -> ONES ( expression ) .)
+
+
+state 66
+
+    (28) matrix_expression -> EYE ( expression ) .
+
+    ;               reduce using rule 28 (matrix_expression -> EYE ( expression ) .)
+    ADD             reduce using rule 28 (matrix_expression -> EYE ( expression ) .)
+    MINUS           reduce using rule 28 (matrix_expression -> EYE ( expression ) .)
+    MUL             reduce using rule 28 (matrix_expression -> EYE ( expression ) .)
+    DIVIDE          reduce using rule 28 (matrix_expression -> EYE ( expression ) .)
+    DOTADD          reduce using rule 28 (matrix_expression -> EYE ( expression ) .)
+    DOTSUB          reduce using rule 28 (matrix_expression -> EYE ( expression ) .)
+    DOTMUL          reduce using rule 28 (matrix_expression -> EYE ( expression ) .)
+    DOTDIVIDE       reduce using rule 28 (matrix_expression -> EYE ( expression ) .)
+    ,               reduce using rule 28 (matrix_expression -> EYE ( expression ) .)
+    )               reduce using rule 28 (matrix_expression -> EYE ( expression ) .)
+    ]               reduce using rule 28 (matrix_expression -> EYE ( expression ) .)
+
+
+state 67
+
+    (31) matrix_rows -> [ matrix_elems ] .
+
+    ]               reduce using rule 31 (matrix_rows -> [ matrix_elems ] .)
+    ,               reduce using rule 31 (matrix_rows -> [ matrix_elems ] .)
+
+
+state 68
+
+    (32) matrix_elems -> matrix_elems , . matrix_elems
+    (32) matrix_elems -> . matrix_elems , matrix_elems
+    (33) matrix_elems -> . expression
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    matrix_elems                   shift and go to state 71
+    expression                     shift and go to state 60
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 69
+
+    (30) matrix_rows -> matrix_rows , matrix_rows .
+    (30) matrix_rows -> matrix_rows . , matrix_rows
+
+  ! shift/reduce conflict for , resolved as shift
+    ]               reduce using rule 30 (matrix_rows -> matrix_rows , matrix_rows .)
+    ,               shift and go to state 62
+
+  ! ,               [ reduce using rule 30 (matrix_rows -> matrix_rows , matrix_rows .) ]
+
+
+state 70
+
+    (12) assignment -> ID [ expression , expression ] . = expression ;
+
+    =               shift and go to state 72
+
+
+state 71
+
+    (32) matrix_elems -> matrix_elems , matrix_elems .
+    (32) matrix_elems -> matrix_elems . , matrix_elems
+
+  ! shift/reduce conflict for , resolved as shift
+    ]               reduce using rule 32 (matrix_elems -> matrix_elems , matrix_elems .)
+    ,               shift and go to state 68
+
+  ! ,               [ reduce using rule 32 (matrix_elems -> matrix_elems , matrix_elems .) ]
+
+
+state 72
+
+    (12) assignment -> ID [ expression , expression ] = . expression ;
+    (13) expression -> . expression ADD expression
+    (14) expression -> . expression MINUS expression
+    (15) expression -> . expression MUL expression
+    (16) expression -> . expression DIVIDE expression
+    (17) expression -> . expression DOTADD expression
+    (18) expression -> . expression DOTSUB expression
+    (19) expression -> . expression DOTMUL expression
+    (20) expression -> . expression DOTDIVIDE expression
+    (21) expression -> . INTNUM
+    (22) expression -> . FLOAT
+    (23) expression -> . matrix_expression
+    (24) expression -> . matrix_create
+    (25) expression -> . ID
+    (26) matrix_expression -> . ZEROS ( expression )
+    (27) matrix_expression -> . ONES ( expression )
+    (28) matrix_expression -> . EYE ( expression )
+    (29) matrix_create -> . [ matrix_rows ]
+
+    INTNUM          shift and go to state 16
+    FLOAT           shift and go to state 17
+    ID              shift and go to state 14
+    ZEROS           shift and go to state 20
+    ONES            shift and go to state 21
+    EYE             shift and go to state 22
+    [               shift and go to state 23
+
+    expression                     shift and go to state 73
+    matrix_expression              shift and go to state 18
+    matrix_create                  shift and go to state 19
+
+state 73
+
+    (12) assignment -> ID [ expression , expression ] = expression . ;
+    (13) expression -> expression . ADD expression
+    (14) expression -> expression . MINUS expression
+    (15) expression -> expression . MUL expression
+    (16) expression -> expression . DIVIDE expression
+    (17) expression -> expression . DOTADD expression
+    (18) expression -> expression . DOTSUB expression
+    (19) expression -> expression . DOTMUL expression
+    (20) expression -> expression . DOTDIVIDE expression
+
+    ;               shift and go to state 74
+    ADD             shift and go to state 30
+    MINUS           shift and go to state 31
+    MUL             shift and go to state 32
+    DIVIDE          shift and go to state 33
+    DOTADD          shift and go to state 34
+    DOTSUB          shift and go to state 35
+    DOTMUL          shift and go to state 36
+    DOTDIVIDE       shift and go to state 37
+
+
+state 74
+
+    (12) assignment -> ID [ expression , expression ] = expression ; .
+
+    ID              reduce using rule 12 (assignment -> ID [ expression , expression ] = expression ; .)
+    $end            reduce using rule 12 (assignment -> ID [ expression , expression ] = expression ; .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for , in state 69 resolved as shift
+WARNING: shift/reduce conflict for , in state 71 resolved as shift

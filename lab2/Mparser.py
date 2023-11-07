@@ -27,26 +27,23 @@ def check_existance_matrix(name):
 
 precedence = (
    # to fill ...
+   ("left", 'EQ', 'NOTEQ', 'LESS', 'GREATER', 'LESSEQ', 'GREATEREQ'),
    ("left", 'DOTADD', 'DOTSUB'),
    ("left", 'DOTMUL', 'DOTDIVIDE'),
    ("left", 'ADD', 'MINUS'),
-   ("left", 'DIVIDE', 'MUL')
+   ("left", 'DIVIDE', 'MUL'),
+   ("right", '\'')
    # to fill ...
 )
 
 
 def p_error(p):
+    global error_code
     match error_code:
         case 1: print("name error")
         case 2: print("variable is not a matrix error")
-        case 2: print("matrix diffrent size error")
+        case 3: print("matrix diffrent size error")
         case other: print("Something wrong :D")
-    if p:
-        print(p)
-        print("Syntax error at line {0}: LexToken({1}, '{2}')".format(p.lineno, p.type, p.value))
-    else:
-        print("Unexpected end of input")
-
 
 def p_program(p):
     """program : instructions_opt"""
@@ -73,6 +70,7 @@ def p_assignment(p):
                   | ID MULASSIGN expression ';'
                   | ID DIVASSIGN expression ';'
                   | ID '[' expression ',' expression ']' '=' expression ';' """
+    global error_code
     
     if p[2] == "[" and p[4] == ',' and p[6] == ']':
         tmp = check_existance_matrix(p[1])
@@ -122,6 +120,7 @@ def p_expression_matroxop(p):
                   | expression DOTSUB expression
                   | expression DOTMUL expression
                   | expression DOTDIVIDE expression"""
+    global error_code
     if len(p[1]) != len(p[3]):
         error_code = 3
         p_error(p)
@@ -158,6 +157,7 @@ def p_expression_number(p):
 
 def p_expression_id(p):
     """expression : ID"""
+    global error_code
     if p[1] in names:
         p[0] = names[p[1]]
     else:
@@ -202,5 +202,48 @@ def p_matrix_elems(p):
         tab.extend(p[3])
         tab.extend(p[1])
     p[0] = tab
+
+def p_condition(p):
+    """expression : condition"""
+    p[0] = p[1]
+
+def p_condition_operations(p):
+    """condition : expression EQ expression
+                  | expression NOTEQ expression
+                  | expression GREATER expression
+                  | expression GREATEREQ expression
+                  | expression LESS expression
+                  | expression LESSEQ expression"""
+    if p[2] == '==':
+        p[0] = p[1] == p[3]      
+    elif p[2] == '!=':
+        p[0] = p[1] != p[3]
+    elif p[2] == '>':
+        p[0] = p[1] > p[3]
+    elif p[2] == '<':
+        p[0] = p[1] < p[3]
+    elif p[2] == '>=':
+        p[0] = p[1] >= p[3]
+    elif p[2] == '<=':
+        p[0] = p[1] <= p[3]
+
+def p_instruction_if_else(p):
+    """instruction : IF '(' condition ')' expression
+                  | IF '(' condition ')' expression ELSE expression"""
+    global error_code
+    
+    if len(p) == 6:
+        print("in if")
+        if p[3]:
+            p[0] = p[5]
+    elif len(p) == 8:
+        print("in if else")
+        if p[3]:
+            p[0] = p[5]
+        else:
+            p[0] = p[7]
+    else:
+        error_code = 1
+        p_error(p)
     
 parser = yacc.yacc()

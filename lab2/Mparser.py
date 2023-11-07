@@ -42,6 +42,7 @@ def p_error(p):
         case 2: print("matrix diffrent size error")
         case other: print("Something wrong :D")
     if p:
+        print(p)
         print("Syntax error at line {0}: LexToken({1}, '{2}')".format(p.lineno, p.type, p.value))
     else:
         print("Unexpected end of input")
@@ -101,6 +102,20 @@ def p_expression_binop(p):
     elif p[2] == '*': p[0] = p[1] * p[3]
     elif p[2] == '/': p[0] = p[1] / p[3]
 
+def p_expressions_unaryneg(p):
+    '''expression : MINUS expression'''
+    if (len(p) == 3):
+        if (type(p[2]) == list):
+            len_tab = len(p[2])
+            p[0] = [[-p[2][i][j] for i in range(len_tab)] for j in range(len_tab)]
+        else:
+            p[0] = -p[2]
+
+def p_expressions_transpose(p):
+    '''expression : expression "\'" '''
+    if (len(p) == 3):
+        len_tab = len(p[1])
+        p[0] = [[p[1][j][i] for i in range(len_tab)] for j in range(len_tab)]
 
 def p_expression_matroxop(p):
     """expression : expression DOTADD expression
@@ -188,6 +203,4 @@ def p_matrix_elems(p):
         tab.extend(p[1])
     p[0] = tab
     
-    
-
 parser = yacc.yacc()

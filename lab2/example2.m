@@ -1,14 +1,13 @@
-
 C = -A;
 C = B' ;
 C = A+B ;
 C = A-B ;
 C = A*B ;
 C = A/B ;
-C = A.+B ;
-C = A.-B ;
-C = A.*B ;
-C = A./B ;
+# C = A.+B ;
+# C = A.-B ;
+# C = A.*B ;
+# C = A./B ;
 
 C += B ;
 C -= B ;

@@ -108,12 +108,12 @@ def p_matrix_create(p):
     return p
 
 def p_matrix_rows(p):
-    """matrix_rows : matrix_rows ',' matrix_rows
+    """matrix_rows : '[' matrix_elems ']' ',' matrix_rows
                    | '[' matrix_elems ']'"""
     return p
 
 def p_matrix_elems(p):
-    """matrix_elems : matrix_elems ',' matrix_elems
+    """matrix_elems : expression ',' matrix_elems
                    | expression"""
     return p
 def p_condition(p):

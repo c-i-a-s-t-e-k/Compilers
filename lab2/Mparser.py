@@ -11,8 +11,8 @@ precedence = (
    ("nonassoc", 'IFX'),
    ("nonassoc" , 'ELSE') ,
    ("left", 'DOTADD', 'DOTSUB'),
-   ("left", 'DOTMUL', 'DOTDIVIDE'),
    ("left", 'ADD', 'MINUS'),
+   ("left", 'DOTMUL', 'DOTDIVIDE'),
    ("left", 'DIVIDE', 'MUL'),
    ("right", 'UMINUS')
 )
@@ -56,6 +56,10 @@ def p_assignment(p):
                   | ID SUBASSIGN expression
                   | ID MULASSIGN expression 
                   | ID DIVASSIGN expression
+                  | ID '[' expression ',' expression ']' ADDASSIGN expression
+                  | ID '[' expression ',' expression ']' SUBASSIGN expression
+                  | ID '[' expression ',' expression ']' MULASSIGN expression
+                  | ID '[' expression ',' expression ']' DIVASSIGN expression
                   | ID '[' expression ',' expression ']' '=' expression """
     
     return p
@@ -153,4 +157,6 @@ def p_for_l(p):
 def p_return_expr(p):
     """return_expr : RETURN
                    | RETURN expression"""
+    return p
+
 parser = yacc.yacc()

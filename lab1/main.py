@@ -1,9 +1,9 @@
-import scaner
+import scanner
 
 if __name__ == "__main__":
-    lexer = scaner.lexer
-    fh = open("lab1\example_full.txt", "r")
+    lexer = scanner.lexer
+    fh = open("example_full.txt", "r")
     lexer.input( fh.read() )
-    print(scaner.tokens)
+    print(scanner.tokens)
     for token in lexer:
         print(f"line %d: %s(%s)" %(token.lineno, token.type, token.value))

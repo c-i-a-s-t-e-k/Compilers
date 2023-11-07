@@ -132,12 +132,12 @@ def p_if_stmt(p):
     return p
 
 def p_create_stmt(p):
-    """create_stmt : print_stmt"""
+    """create_stmt : p_print_list"""
     return p
 
-def p_print_stmt(p):
-    """print_stmt : STRING
-                  | print_stmt ',' expression
+def p_print_list(p):
+    """p_print_list : STRING
+                  | p_print_list ',' expression
                   | expression"""
     return p
 

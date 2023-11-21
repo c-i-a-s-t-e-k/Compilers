@@ -15,7 +15,7 @@ class Mparser:
         ("left", 'ADD', 'MINUS'),
         ("left", 'DOTMUL', 'DOTDIVIDE'),
         ("left", 'DIVIDE', 'MUL'),
-        ("right", 'UMINUS')
+        ("right", 'UMINUS'),
         )
         
     def p_error(self, p):
@@ -76,7 +76,7 @@ class Mparser:
                     | ID '[' expression ',' expression ']' DIVASSIGN expression
                     | ID '[' expression ',' expression ']' '=' expression """
         if p[2] == "[":
-            p[0] = AST.AssignExpr(p[7], AST.Variable(AST.Id(p[1]), (p[3], p[5])))
+            p[0] = AST.AssignExpr(p[7], AST.Variable(AST.Id(p[1]), (p[3], p[5])), p[8])
         else:
             p[0] = AST.AssignExpr(p[2], AST.Id(p[1]), p[3])
 
@@ -92,8 +92,8 @@ class Mparser:
         p[0] = AST.Uminus(p[2])
 
     def p_expressions_transpose(self, p):
-        '''expression : expression "\'" '''
-        p[0] = AST.TransposeExpr(p[1])
+        '''expression : ID "\'"'''
+        p[0] = AST.TransposeExpr(AST.Id(p[1]))
 
     def p_expression_matrixop(self, p):
         """expression : expression DOTADD expression
@@ -139,17 +139,17 @@ class Mparser:
         """matrix_rows : '[' matrix_elems ']' ',' matrix_rows
                     | '[' matrix_elems ']'"""
         if len(p) > 4:
-            p[0] = p[2] + [p[5]]
+            p[0] = [p[2]] + p[5]
         else:
-            p[0] = p[2]
+            p[0] = [p[2]]
 
     def p_matrix_elems(self, p):
         """matrix_elems : expression ',' matrix_elems
                     | expression"""
         if len(p) > 2:
-            p[0] = p[1] + [p[3]]
+            p[0] = [p[1]] + p[3]
         else:
-            p[0] = p[1]
+            p[0] = [p[1]]
 
     def p_condition(self, p):
         """condition : expression GREATER expression
@@ -171,17 +171,17 @@ class Mparser:
 
     def p_create_stmt(self, p):
         """create_stmt : p_print_list"""
-        p[0] = AST.PrintExpr(p[1])
+        p[0] = [AST.PrintExpr(p[1])]
 
     def p_print_list_1(self, p):
         """p_print_list : STRING """
-        p[0] = AST.String(p[1])
+        p[0] = [AST.String(p[1])]
 
     def p_print_list_2(self, p):
         """p_print_list : p_print_list ',' expression
                     | expression"""
         if len(p) < 3:
-            p[0] = p[1]
+            p[0] = [p[1]]
         else:
             p[0] = p[1] + [p[3]]
 

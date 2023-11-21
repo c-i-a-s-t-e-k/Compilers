@@ -34,13 +34,15 @@ class TreePrinter:
     def printTree(self, indent=0):
         self.print_indent(indent)
         print("REF")
-        self.id.printTree(indent + 1)
-        for expr in self.index:
-            expr.printTree(indent + 1)
+        self.name.printTree(indent + 1)
+        if self.idx is not None:
+            for expr in self.idx:
+                expr.printTree(indent + 1)
     
     @addToClass(AST.String)
     def printTree(self, indent=0):
         self.print_indent(indent)
+        print("STRING")
         print(self.string)
 
     @addToClass(AST.BinExpr)
@@ -113,7 +115,7 @@ class TreePrinter:
         if self.else_body is not None:
             self.print_indent(indent)
             print("ELSE")
-            self.else_body.printTree(indent)
+            self.else_body.printTree(indent + 1)
     
     @addToClass(AST.AssignExpr)
     def printTree(self, indent=0):
@@ -188,24 +190,3 @@ class TreePrinter:
         self.print_indent(indent)
         print("BOO - error bruh")
     
-    
-
-
-if __name__ == "__main__":
-    file_list = ["example1.txt"]
-    parser = yacc.yacc(module=Mparser)
-    for filename in file_list:
-        # if filename != "test_5.txt": continue
-        file_path = os.path.join(filename)
-
-        if os.path.isfile(file_path):
-            with open(file_path, 'r') as file:
-                text = file.read()
-                print(f'Testing {filename}:')
-            try:
-                cos = parser.parse(text, lexer=Mparser.scanner)
-                if cos is not None:
-                    cos.printTree(0)
-
-            except LexError as e:
-                print(f"Lexer error: {e}")

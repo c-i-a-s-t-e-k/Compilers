@@ -1,6 +1,5 @@
 class Node(object):
-    def print_indent(self, num):
-        print(num * "|\t", end="")
+    pass
 
 class IntNum(Node):
     def __init__(self, value):

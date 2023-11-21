@@ -59,7 +59,7 @@ t_LESSEQ = r"<="
 t_NOTEQ = r"!="
 t_EQ = r"=="
 
-literals = ["+", "-", "*", "/", "(", ")", ";", "=", "\'", ",", "[", "]", "{", "}", ":"]
+literals = ["+", "-", "*", "/", "(", ")", ";", "=", "'", ",", "[", "]", "{", "}", ":"]
 
 def t_FLOAT(t):
     r"[0-9]+\.[0-9]+|[0-9]+[eE][-+]?[0-9]+|[0-9]+\.[0-9]+[eE][-+]?[0-9]+"
@@ -103,6 +103,8 @@ def t_COMMENT(t):
     pass
 
 lexer = lex.lex()
+def get_lexer():
+    return lexer
 
 if __name__ == "__main__":
     lexer = lex.lex()

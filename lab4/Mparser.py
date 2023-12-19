@@ -70,7 +70,7 @@ class Mparser:
                     | ID '[' expression ']'"""
         if len(p) == 2:
             p[0] = AST.Id(p[1], lineno=p.lineno(1))
-        elif len(p) == 6:
+        elif len(p) > 5:
             p[0] = AST.Variable(AST.Id(p[1], lineno=p.lineno(1)), (p[3], p[5]), lineno=p.lineno(1))
         else:
             p[0] = AST.Variable(AST.Id(p[1], lineno=p.lineno(1)), (p[3], ), lineno=p.lineno(1))
@@ -93,7 +93,7 @@ class Mparser:
                     | expression MINUS expression
                     | expression MUL expression
                     | expression DIVIDE expression"""
-        p[0] = AST.BinExpr(p[2], p[1], p[3], lineno=p.lineno(1))
+        p[0] = AST.BinExpr(p[2], p[1], p[3], lineno=p.lineno(2))
 
     def p_expressions_unaryneg(self, p):
         '''expression : MINUS expression %prec UMINUS'''

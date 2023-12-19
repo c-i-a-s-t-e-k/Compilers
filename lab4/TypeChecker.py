@@ -144,17 +144,17 @@ class TypeChecker(NodeVisitor):
  
     # TODO: sprawdzić później czy działa (?)
     def visit_Variable(self, node: AST.Variable):
-        if node.name.id not in self.symbol_table:
-            print(f"{node.lineno} id not found")
+        if node.name.id not in self.symbol_table.symbols \
+            and node.name.id not in self.symbol_table.shape:
+            print(f"Line: {node.lineno} Error: id not found")
             return None
         shape = self.symbol_table.shape[node.name.id]
 
         if len(shape) != len(node.idx):
             print(f"Line: {node.lineno} Error: Vector size not matched")
             return None
-
         for i in range(len(node.idx)):
-            if node.idx[i] >= shape[i]:
+            if node.idx[i].value >= shape[i]:
                 print(f"Line: {node.lineno}, Error: index out of range")
                 return None
         return self.symbol_table.type[node.name.id]
@@ -334,16 +334,16 @@ class TypeChecker(NodeVisitor):
 
     def visit_Vector(self, node: AST.Vector):
         
-        d = len(node.vector)
+        rows = len(node.vector)
         for vec in node.vector:
             if isinstance(vec, AST.Vector):
                 self.visit(vec.vector)
-                ed = len(vec.vector)
+                cols = len(vec.vector)
             elif isinstance(vec, list):
-                ed = len(vec.vector)
+                cols = len(vec.vector)
             else:
-                ed = 1
-            if d != ed and ed != 1:
+                cols = 1
+            if rows != cols and cols != 1:
                 print("Line: {0} Error: Wrong size of vector".format(node.lineno), end='\n')
                 return None
         return 'vector'
@@ -369,10 +369,9 @@ class TypeChecker(NodeVisitor):
         if val_type != "int":
             print(f"Line: {node.lineno} Error: Incorrect input for function")
             return None
+        return ("vector", node.val.value)
     
     def visit_Eye(self, node: AST.Eye):
-        # print("WITAM v2")
-        # print(self.symbol_table.symbols)
         val_type = self.visit(node.val)
         if val_type != "int":
             print(f"Line: {node.lineno} Error: Incorrect input for function")

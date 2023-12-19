@@ -159,6 +159,13 @@ class TreePrinter:
             print("VECTOR")
             for col in row:
                 col.printTree(indent + 2)
+    
+    @addToClass(AST.Vector)
+    def printTree(self, indent=0):
+        TreePrinter.print_indent(indent)
+        print("VECTOR")
+        for elem in self.vector:
+            elem.printTree(indent + 1)
 
     @addToClass(AST.Uminus)
     def printTree(self, indent=0):

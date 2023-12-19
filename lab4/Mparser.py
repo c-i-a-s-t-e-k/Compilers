@@ -86,7 +86,7 @@ class Mparser:
                     | id_change SUBASSIGN id_change ';'
                     | id_change MULASSIGN id_change ';'
                     | id_change DIVASSIGN id_change ';'"""
-        p[0] = AST.AssignExpr(p[2], p[1], p[3], lineno=p.lineno(1))
+        p[0] = AST.AssignExpr(p[2], p[1], p[3], lineno=p.lineno(2))
 
     def p_expression_binop(self, p):
         """expression : expression ADD expression
@@ -108,7 +108,7 @@ class Mparser:
                     | expression DOTSUB expression
                     | expression DOTMUL expression
                     | expression DOTDIVIDE expression"""
-        p[0] = AST.MatrixBinExpr(p[2], p[1], p[3], lineno=p.lineno(1))
+        p[0] = AST.MatrixBinExpr(p[2], p[1], p[3], lineno=p.lineno(2))
 
     def p_expression_number(self, p):
         """expression : matrix_expression
@@ -179,7 +179,7 @@ class Mparser:
                     | expression LESSEQ expression
                     | expression NOTEQ expression
                     | expression EQ expression"""
-        p[0] = AST.RelExpr(p[2], p[1], p[3], lineno=p.lineno(1))
+        p[0] = AST.RelExpr(p[2], p[1], p[3], lineno=p.lineno(2))
 
     def p_if_stmt(self, p):
         """if_stmt : IF '(' condition ')' instruction %prec IFX

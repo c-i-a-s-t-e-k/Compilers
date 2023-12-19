@@ -306,6 +306,8 @@ class TypeChecker(NodeVisitor):
 
         else:
             var_type = self.symbol_table.get(left_id, node.lineno)
+            if var_type is None:
+                return None
             if var_type == 'vector' and val_type == 'vector':
                 var_d = self.symbol_table.shape[left_id]
                 val_d = node.right.idx

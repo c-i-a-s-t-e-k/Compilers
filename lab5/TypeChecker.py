@@ -163,11 +163,11 @@ class TypeChecker(NodeVisitor):
         return 'str'
     
     def visit_BinExpr(self, node: AST.BinExpr):
-        if self.symbol_table.get(node.right.id, node.lineno) is None:
-            return None
+        # if self.symbol_table.get(node.right.id, node.lineno) is None:
+        #     return None
     
-        if self.symbol_table.get(node.left.id, node.lineno) is None:
-            return None        
+        # if self.symbol_table.get(node.left.id, node.lineno) is None:
+        #     return None        
 
         type1 = self.visit(node.left)     # type1 = node.left.accept(self) 
         type2 = self.visit(node.right)    # type2 = node.right.accept(self)

@@ -19,9 +19,10 @@ class MemoryStack:
     def __init__(self, memory=None): # initialize memory stack with memory <memory>
         self.values = []
         self.names = []
-        for name, vale in memory:
-            self.values.append(vale)
-            self.names.append(name)
+        if memory is not None:
+            for name, vale in memory:
+                self.values.append(vale)
+                self.names.append(name)
 
     def get(self, name):             # gets from memory stack current value of variable <name>
         value_index = None

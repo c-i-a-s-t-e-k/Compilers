@@ -17,6 +17,17 @@ class Interpreter(object):
     def visit(self, node):
         pass
 
+    @when(AST.InstructionsExpr)
+    def visit(self, node):
+        for instruction in node.instructions:
+            instruction.accept(self)
+        return
+    
+    @when(AST.InstructionsBlankExpr)
+    def visit(self, node):
+        node.instructions.accept(self)
+        return
+        
     @when(AST.BinExpr)
     def visit(self, node):
         r1 = node.left.accept(self)
@@ -36,22 +47,28 @@ class Interpreter(object):
 
     @when(AST.AssignExpr)
     def visit(self, node):
-        r1 = node.left.accept(self)
-        r2 = node.left.accept(self)
+        r1 = node.left
+        r2 = node.right.accept(self)
+        print(r2)
+        name = r1.id
         if node.op == "=":
-            self.memory.put(r1.name, r2)
+            self.memory.put(name, r2)
             return r2
         elif node.op == "+=":
-            self.memory.put(r1.name, r1 + r2)
+            val = self.memory.get(name)
+            self.memory.put(name, val + r2)
             return r1 + r2
         elif node.op == "-=":
-            self.memory.put(r1.name, r1 - r2)
+            val = self.memory.get(name)
+            self.memory.put(name, val - r2)
             return r1 - r2
         elif node.op == "*=":
-            self.memory.put(r1.name, r1 * r2)
+            val = self.memory.get(name)
+            self.memory.put(name, val * r2)
             return r1 * r2
         elif node.op == "/=":
-            self.memory.put(r1.name, r1 / r2)
+            val = self.memory.get(name)
+            self.memory.put(name, val / r2)
             return r1 / r2
 
     @when(AST.BreakExpr)
@@ -89,9 +106,13 @@ class Interpreter(object):
     
     @when(AST.PrintExpr)
     def visit(self, node):
-        to_print = node.print_ins.accept(self)
+        to_print = node.print_ins
         for print_val in to_print:
-            print(to_print)
+            if isinstance(print_val, AST.Id):
+                print(self.memory.get(print_val.id))
+            else:
+                print(print_val, end=" ")
+        print()
         return
         
     # simplistic while loop interpretation

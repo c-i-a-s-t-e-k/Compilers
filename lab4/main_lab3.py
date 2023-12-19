@@ -3,7 +3,7 @@ import sys
 import ply.yacc as yacc
 from Mparser import Mparser
 from TreePrinter import TreePrinter
-from TypeChecker import TypeChecker
+
 
 if __name__ == '__main__':
 
@@ -17,10 +17,5 @@ if __name__ == '__main__':
     Mparser = Mparser()
     parser = yacc.yacc(module=Mparser)
     text = file.read()
-
-    ast = parser.parse(text, lexer=Mparser.scanner)
-
-    # Below code shows how to use visitor
-    typeChecker = TypeChecker()   
-    typeChecker.visit(ast)   # or alternatively ast.accept(typeChecker)
-    
+    ast = parser.parse(text, lexer=Mparser.scanner, debug = False)
+    ast.printTree()

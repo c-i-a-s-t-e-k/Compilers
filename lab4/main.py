@@ -19,6 +19,9 @@ if __name__ == '__main__':
     text = file.read()
 
     ast = parser.parse(text, lexer=Mparser.scanner)
+    print("###############")
+    print(dir(ast))
+    print("###############")
 
     # Below code shows how to use visitor
     typeChecker = TypeChecker()   

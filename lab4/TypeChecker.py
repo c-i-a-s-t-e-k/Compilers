@@ -267,6 +267,7 @@ class TypeChecker(NodeVisitor):
         if val_type is None:
             return None
         # print(val_type)
+        
         left_id = node.left.id
         if node.op == '=':
             # print(left_id)

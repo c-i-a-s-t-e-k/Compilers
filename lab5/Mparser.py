@@ -38,6 +38,10 @@ class Mparser:
     def p_instructions_2(self, p):
         """instructions : instruction """
         p[0] = p[1]
+    
+    def p_instruction_brackets(self, p):
+        """instruction : '{' instructions '}'"""
+        p[0] = p[2]
 
     def p_instruction(self, p):
         """instruction : assignment 
@@ -50,10 +54,6 @@ class Mparser:
 
     def p_instruction_2(self, p):
         """instruction : PRINT create_stmt ';'"""
-        p[0] = p[2]
-
-    def p_instruction_brackets(self, p):
-        """instruction : '{' instructions '}'"""
         p[0] = p[2]
 
     def p_continue(self, p):
@@ -70,7 +70,7 @@ class Mparser:
                     | ID '[' expression ']'"""
         if len(p) == 2:
             p[0] = AST.Id(p[1], lineno=p.lineno(1))
-        elif len(p) == 6:
+        elif len(p) > 5:
             p[0] = AST.Variable(AST.Id(p[1], lineno=p.lineno(1)), (p[3], p[5]), lineno=p.lineno(1))
         else:
             p[0] = AST.Variable(AST.Id(p[1], lineno=p.lineno(1)), (p[3], ), lineno=p.lineno(1))
@@ -86,14 +86,14 @@ class Mparser:
                     | id_change SUBASSIGN id_change ';'
                     | id_change MULASSIGN id_change ';'
                     | id_change DIVASSIGN id_change ';'"""
-        p[0] = AST.AssignExpr(p[2], p[1], p[3], lineno=p.lineno(1))
+        p[0] = AST.AssignExpr(p[2], p[1], p[3], lineno=p.lineno(2))
 
     def p_expression_binop(self, p):
         """expression : expression ADD expression
                     | expression MINUS expression
                     | expression MUL expression
                     | expression DIVIDE expression"""
-        p[0] = AST.BinExpr(p[2], p[1], p[3], lineno=p.lineno(1))
+        p[0] = AST.BinExpr(p[2], p[1], p[3], lineno=p.lineno(2))
 
     def p_expressions_unaryneg(self, p):
         '''expression : MINUS expression %prec UMINUS'''
@@ -108,7 +108,7 @@ class Mparser:
                     | expression DOTSUB expression
                     | expression DOTMUL expression
                     | expression DOTDIVIDE expression"""
-        p[0] = AST.MatrixBinExpr(p[2], p[1], p[3], lineno=p.lineno(1))
+        p[0] = AST.MatrixBinExpr(p[2], p[1], p[3], lineno=p.lineno(2))
 
     def p_expression_number(self, p):
         """expression : matrix_expression
@@ -179,7 +179,7 @@ class Mparser:
                     | expression LESSEQ expression
                     | expression NOTEQ expression
                     | expression EQ expression"""
-        p[0] = AST.RelExpr(p[2], p[1], p[3], lineno=p.lineno(1))
+        p[0] = AST.RelExpr(p[2], p[1], p[3], lineno=p.lineno(2))
 
     def p_if_stmt(self, p):
         """if_stmt : IF '(' condition ')' instruction %prec IFX
@@ -227,6 +227,10 @@ class Mparser:
             p[0] = AST.RetrunExpr(lineno=p.lineno(1))
         else:
             p[0] = AST.RetrunExpr(p[2], lineno=p.lineno(1))
+            
+    def p_expression_brackets(self, p):
+        """expression : '(' expression ')'"""
+        p[0] = p[2]
 
     def p_error(self, p):
         if p:

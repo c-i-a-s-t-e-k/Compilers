@@ -30,7 +30,7 @@ class SymbolTable(object):
         if name in self.symbols:
             return self.symbols[name]
         elif self.parent is not None:
-            return self.parent.get(name)
+            return self.parent.get(name, lineno)
         else:
             print(f"Line: {lineno}, Symbol <{name}> not found in symbols: {self.name} {self.symbols} ")
             return None

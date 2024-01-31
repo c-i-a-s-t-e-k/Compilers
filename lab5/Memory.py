@@ -17,45 +17,31 @@ class Memory:
 class MemoryStack:
                                                                              
     def __init__(self, memory=None): # initialize memory stack with memory <memory>
-        self.values = []
-        self.names = []
-        if memory is not None:
-            for name, vale in memory:
-                self.values.append(vale)
-                self.names.append(name)
+        if memory is None:
+            memory = Memory("variables")
+        self.stack = [memory]
 
-    def get(self, name):             # gets from memory stack current value of variable <name>
-        value_index = None
-        for i, name_val in enumerate(self.names):
-            if name_val == name:
-                value_index = i
-        if value_index is None:
-            return None
-        else:
-            return self.values[value_index]
-        
+    def get(self, name):  # gets from memory stack current value of variable <name>
+        for i in range(len(self.stack) - 1, -1, -1):
+            if self.stack[i].has_key(name):
+                return self.stack[i].get(name)
+        return None
 
-    def insert(self, name, value): # inserts into memory stack variable <name> with value <value>
-        self.names.append(name)
-        self.values.append(name)
+    def insert(self, name, value):  # inserts into memory stack variable <name> with value <value>
+        self.stack[-1].put(name, value)
 
-    def set(self, name, value): # sets variable <name> to value <value>
-        name_index = None
-        for i, value_tocheck in enumerate(self.values):
-            if value == value_tocheck:
-                name_index = i
+    def set(self, name, value):  # sets variable <name> to value <value>
+        self.stack[-1].put(name, value)
 
-        if name_index is not None:
-            self.names[name_index] = name
-        
+    def push(self, memory: str):  # pushes memory <memory> onto the stack
+        self.stack.append(Memory(memory))
 
-    def push(self, memory): # pushes memory <memory> onto the stack
-        for name, value in memory:
-            self.names.append(name)
-            self.values.append(value)
+    def pop(self):  # pops the top memory from the stack
+        for key in list(self.stack[-1].memory.keys()):
+            for i in range(len(self.stack) - 2, -1, -1):
+                if self.stack[i].has_key(key):
+                    self.stack[i].put(key, self.stack[-1].get(key))
+                    break
 
-    def pop(self):          # pops the top memory from the stack
-        name = self.names.pop()
-        value = self.values.pop()
-        return name, value
+        self.stack.pop()
 
